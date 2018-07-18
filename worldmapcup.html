@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>World Map Cup Challenge</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+<style>
+#map {
+    position: fixed;
+    width:50%;
+}
+#features {
+    width: 50%;
+    margin-left: 50%;
+    font-family: Tw Cen MT;
+    overflow-y: scroll;
+    background-color: #fafafa;
+}
+section {
+    padding:  25px 50px;
+    line-height: 25px;
+    border-bottom: 1px solid #ddd;
+    opacity: 0.25;
+    font-size: 20px;
+}
+section.active {
+    opacity: 1;
+}
+section:last-child {
+    border-bottom: none;
+    margin-bottom: 1000px;
+}
+</style>
+
+<div id='map'></div>
+<div id='features'>
+    <section id='welcome' class='active'>
+        <h3>Welcome to Challenge #3!</h3>
+        <p>With Mapbox's <a href="https://www.mapbox.com/mapbox-gl-js/api/">GL JS JavaScript library</a>, you can create interactive maps for your web applications. By looking at the source code, you can get a sense of how to make an interactive map that can tell a story. Scroll down to read more...</p>
+    </section>
+    <section id='section1' class='active'>
+        <h3>Section 1</h3>
+        <p>Here's where you can add a narrative to describe your story about the World Cup. Where was your favorite game? What stadiums stood out this cup? Let's start with Iceland, a country of about 350,000 people that proved to be a force in the World Cup and brought us the <a href="https://www.youtube.com/watch?v=uJ_fh_Ks9QY">Thunderclap</a>.
+    </section>
+    <section id='section2'>
+        <h3>Section 2</h3>
+        <p>As you scroll through these sections, your map will fly them to the locations you've specified. A sense of place is something that a lot of people resonate with. Give your story context with a view of landscape or vary the pitch and rotation to get a new perspective.</p>
+    </section>
+    <section id='section3'>
+        <h3>Section 3</h3>
+        <p>Add pictures! <br><br> <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Luzhniki_Stadium%2C_Moscow.jpg" width='480' ><br><br><a href="https://en.wikipedia.org/wiki/2018_FIFA_World_Cup">Wikipedia</a> is a great place to start.</p>
+    </section>
+    <section id='section4'>
+        <h3>Section 4</h3>
+        <p>Or even gifs! <br><br><iframe src="https://giphy.com/embed/VUkEyinHOajPG" width="480" height="263" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/VUkEyinHOajPG">via GIPHY</a></p>
+        </p>
+    </section>
+    <section id='section5'>
+        <h3>Section 5</h3>
+        <p>Or videos! WHAT!<br><br><iframe width="560" height="315" src="https://www.youtube.com/embed/ib4tOwmZWi0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> </p>
+    </section>
+    <section id='section6'>
+        <h3>Section 6</h3>
+        <p>3.5 billion people are estimated to be watching the World Cup this year. That's a lot of stories to be told. Tell us what yours is!</p><br><br><iframe src="https://giphy.com/embed/T9fHnACJJq8Ba" width="480" height="271" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/T9fHnACJJq8Ba">via GIPHY</a></p>
+    </section>
+</div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiZXZlcmdsb3ciLCJhIjoiZ09pUXluNCJ9.ZjnwpOuUFCtX4gBMCq6V6g';
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/everglow/cjip3zn5p02em2spdwp4ajaef',
+        bearing: -0,
+        center: [4.976661,50.451111],
+        zoom: 4,
+        speed: 0.8,
+        pitch: 0
+});
+var chapters = {
+    'welcome': {
+        bearing: -0,
+        center: [4.976661,50.451111],
+        zoom: 2,
+        speed: 0.8,
+        pitch: 0
+    },
+    'section1': {
+        bearing: 0,
+        center: [-19.031064350369434,64.78541099852711],
+        zoom: 5.00,
+        pitch: 0
+    },
+    'section2': {
+        center: [39.71142960244049,43.5724132010007],
+        bearing: 54.40,
+        zoom: 12.59,
+        speed: 0.6,
+        pitch: 44.50
+    },
+    'section3': {
+        bearing: 12.80,
+        center: [37.55229965884996,55.715914485195015],
+        zoom: 13.18,
+        speed: 0.6,
+        pitch: 0.00
+    },
+    'section4': {
+        bearing: 60,
+        center: [30.332395030506632,59.939785026691],
+        zoom: 10,
+        speed: 0.6,
+        pitch: 45
+    },
+    'section5': {
+        bearing: 15.20,
+        center: [44.01147741207956,56.32551292321358],
+        zoom: 10.56,
+        pitch: 40.50,
+        speed: 0.6
+    },
+    'section6': {
+        bearing: 0,
+        center: [37.52984664657049,55.75369642243939],
+        zoom: 2,
+        speed: 0.8,
+        pitch: 0
+    },
+};
+// On every scroll event, check which element is on screen
+window.onscroll = function() {
+    var chapterNames = Object.keys(chapters);
+    for (var i = 0; i < chapterNames.length; i++) {
+        var chapterName = chapterNames[i];
+        if (isElementOnScreen(chapterName)) {
+            setActiveChapter(chapterName);
+            break;
+        }
+    }
+};
+var activeChapterName = 'welcome';
+function setActiveChapter(chapterName) {
+    if (chapterName === activeChapterName) return;
+    map.flyTo(chapters[chapterName]);
+    document.getElementById(chapterName).setAttribute('class', 'active');
+    document.getElementById(activeChapterName).setAttribute('class', '');
+    activeChapterName = chapterName;
+}
+function isElementOnScreen(id) {
+    var element = document.getElementById(id);
+    var bounds = element.getBoundingClientRect();
+    return bounds.top < window.innerHeight && bounds.bottom > 0;
+}
+</script>
+</body>
+</html>
